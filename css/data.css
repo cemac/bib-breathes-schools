@@ -1,0 +1,269 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  list-style: none;
+}
+
+body {
+  background-image: url("img/sky.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin: 0 auto;
+  width: calc(100% - 1em);
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.timeseries-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+select {
+  padding: 8px 12px;
+  color: #333333;
+  background-color: #eeeeee;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+select option {
+  background: #ffffff;
+}
+
+#period-drop-down,
+#feature-drop-down {
+  margin-top: 16px;
+  margin-left: 2.5%;
+}
+
+#feature-drop-down {
+  margin-right: 2.5%;
+}
+
+#plotid {
+  width: 95%;
+  height: 450px;
+  margin: 10px auto;
+  position: relative;
+  z-index: 0;
+}
+
+.plot-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #000000;
+  border-radius: 50%;
+  animation: plot-loading-spinner 1s ease infinite;
+}
+
+@keyframes plot-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.summary-stats-div>div,
+h2,
+#no-location-data-div,
+#attribution-div,
+#data-aggregation-div {
+  color: #1c1c1c;
+}
+
+.summary-stats-div>div {
+  color: #3c3c3c;
+  margin: 16px auto;
+}
+
+.summary-stats-div>div>p {
+  font-size: 24px;
+  color: #1c1c1c;
+}
+
+.heatmap-header {
+  display: grid;
+  grid-template-areas: 'title title' 'drop-down button';
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 32px;
+}
+
+#heatmap-title,
+#atmotube-drop-down-div,
+#button-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#heatmap-title {
+  grid-area: title;
+  margin-bottom: 12px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: #0083c6;
+}
+
+#atmotube-drop-down-div {
+  grid-area: drop-down;
+}
+
+#button-div {
+  grid-area: button;
+}
+
+#export-button {
+  position: relative;
+  padding: 8px 12px;
+  background: #009579;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#export-button:active {
+  background: #007a63;
+}
+
+#export-button-text {
+  font: bold 18px "Quicksand", san-serif;
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.button-loading #export-button-text {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.button-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border: 4px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+#no-location-data-div {
+  font-size: 18px;
+  margin-left: 2.5%;
+  margin-bottom: 16px;
+  margin-top: 12px;
+}
+
+#mapid {
+  margin: 10px auto;
+}
+
+.leaflet-legend {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  z-index: 800;
+  line-height: 18px;
+  color: #555;
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.leaflet-legend-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.leaflet-legend i {
+  width: 18px;
+  height: 18px;
+  margin-right: 4px;
+  opacity: 0.7;
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+  *display: inline;
+}
+
+#attribution-div,
+#data-aggregation-div {
+  font-size: 14px;
+  padding-bottom: 12px;
+}
+
+#attribution-div {
+  text-align: right;
+  margin-right: 2.5%;
+}
+
+#data-aggregation-div {
+  margin-left: 2.5%;
+}
+
+@media (min-width: 576px) {
+  .heatmap-header {
+    grid-template-areas: 'drop-down title title button';
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .summary-stats-div {
+    display: flex;
+  }
+  .heatmap-footer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+}

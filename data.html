@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.plot.ly/plotly-2.3.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <script src="js/decrypt.js" charset="utf-8"></script>
+    <script src="js/spin.min.js" charset="utf-8"></script>
+    <script src="js/leaflet.spin.min.js" charset="utf-8"></script>
+    <script src="js/leaflet-easyprint.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <link rel="stylesheet" href="css/data.css">
+    <title>Air Quality Data</title>
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="timeseries-header">
+        <select id="period-drop-down"></select>
+        <select id="feature-drop-down"></select>
+      </div>
+
+      <div id="plotid"></div>
+
+      <div class="summary-stats-div">
+        <div>
+          <p>Atmotube 1</p>
+          <ul id="summary-stats-text1"></ul>
+        </div>
+        <div>
+          <p>Atmotube 2</p>
+          <ul id="summary-stats-text2"></ul>
+        </div>
+        <div>
+          <p>Atmotube 3</p>
+          <ul id="summary-stats-text3"></ul>
+        </div>
+        <div>
+          <p>Atmotube 4</p>
+          <ul id="summary-stats-text4"></ul>
+        </div>
+        <div>
+          <p>Atmotube 5</p>
+          <ul id="summary-stats-text5"></ul>
+        </div>
+      </div>
+
+      <div class="heatmap-header">
+        <div id="heatmap-title">
+          <h2>Heat map showing density of particulates</h2>
+        </div>
+        <div id="atmotube-drop-down-div">
+          <select id="atmotube-drop-down"></select>
+        </div>
+        <div id="button-div">
+          <button type="button" id="export-button">
+            <span id="export-button-text">Export map</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="no-location-data-div">
+        <p id="no-location-data-text"></p>
+      </div>
+
+      <div id="mapid" style="height:500px; width:95%">
+        <div class="leaflet-legend">
+          <div class="leaflet-legend-header">
+            Mean PM2.5 density per square
+          </div>
+        </div>
+      </div>
+
+      <div class="heatmap-footer">
+        <div id="attribution-div">
+          <p>Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a></p>
+        </div>
+        <div id="data-aggregation-div">
+          <p id="data-aggregation-text"></p>
+        </div>
+      </div>
+
+    </div>
+    <script src="js/main.js"></script>
+  </body>
+</html>

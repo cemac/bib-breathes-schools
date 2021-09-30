@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-image: url("img/sky.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #ffffff;
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+.header,
+.select-a-school,
+.school,
+.admin {
+  text-align: center;
+}
+
+.header,
+.school-logo,
+.school-name {
+  margin-bottom: 0.5em;
+}
+
+.header {
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+.select-a-school {
+  margin-bottom: 32px;
+}
+
+h1,
+h2,
+p {
+  font-size: 16px;
+  color: #1c1c1c;
+}
+
+.school {
+  margin-bottom: 2em;
+}
+
+.smallest-logo {
+  width: 75px;
+}
+
+.small-logo {
+  width: 94px;
+}
+
+.medium-logo {
+  width: 101px;
+}
+
+.large-logo {
+  width: 125px;
+}
+
+p {
+  margin: 0 16px;
+}
+
+.school:hover {
+  cursor: pointer;
+}
+
+.school:hover img {
+  opacity: 0.8;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
+
+.school:hover p {
+  color: #0083c6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+.admin {
+  padding-bottom: 32px;
+}
+
+@media (min-width: 576px) {
+  h1,
+  h2,
+  p {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  .bib-logo {
+    flex: 1;
+  }
+  .title {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 10px;
+  }
+  .school {
+    display: flex;
+  }
+  .school-logo {
+    flex: 2;
+  }
+  .school-name {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 48px;
+  }
+}
