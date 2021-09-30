@@ -138,6 +138,9 @@ a:hover {
   color: #0083c6;
 }
 
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
 #atmotube-drop-down-div {
   grid-area: drop-down;
 }
@@ -148,7 +151,7 @@ a:hover {
 
 #export-button {
   position: relative;
-  padding: 8px 12px;
+  padding: 6px 6px;
   background: #009579;
   border: none;
   outline: none;
