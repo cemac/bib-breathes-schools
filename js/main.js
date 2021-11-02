@@ -2,6 +2,15 @@
 
 document.addEventListener('DOMContentLoaded', async function() {
 
+  /* configure zip.js: */
+  zip.configure({
+    useWebWorkers: true,
+    maxWorkers: 2,
+    workerScripts: {
+      inflate: ['js/z-worker-fflate.js', './fflate.min.js'],
+    }
+  });
+
   let atmotube, atmotubeDropDown, binSizes, checkZoomLevel, colors,
       currentBinSize, currentLayer, dataAggregationText, featureDropDown,
       features, get_data, indexFile, layers, layersControl, layout, map,
@@ -51,13 +60,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         data = await fetch_response.json();
         return data;
       };
-      let crypt_string = await fetch_response.text();
-      /* decrypt the data: */
-      let data_string = await decrypt(pass_phrase, crypt_string);
+      const data_blob = await fetch_response.blob();
+      const zip_reader = new zip.ZipReader(new zip.BlobReader(data_blob));
+      const zip_entries = await zip_reader.getEntries();
+      let data_text = await zip_entries[0].getData(
+        new zip.TextWriter(), {
+          'password': pass_phrase
+        }
+      ).catch(error => {});
+      await zip_reader.close();
+
       /* if not empty: */
-      if (data_string != '') {
+      if (data_text != undefined) {
         /* jsonify and store data: */
-        data = JSON.parse(data_string);
+        data = JSON.parse(data_text);
         if (type == "heatmap") {
           noLocationDataText.innerHTML = '';
         };
@@ -71,16 +87,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     };
 
     const indexFiles = {
-      'barkerend':         '15JI3NocKDg35BfiICLiG2IcJMf10a-Nw',
-      'beckfoot_allerton': '1C5w5UxoSCePD4AEfUsfCN_3nlurBO1IM',
-      'beckfoot_heaton':   '16pJZKjQmgcibCfL3DgaRJc5BXew9zVAB',
-      'brackenhill':       '1xMKjj86CKYcZ10bcsXXW1voQjURQacXo',
-      'dixons':            '1ywS_k71YIEmzJp6aq3UNOmryWqi4dM7o',
-      'home_farm':         '1Qb4CY0QPR7PZSl_yPfg9ZemDopyKjY50',
-      'st_barnabas':       '1CjMQrY6HptcGTZXLSVIxUw105AmPq9dO',
-      'st_johns':          '1Ne0-iDHCEi4HLPoLi8P8c6rvb1SLZYYR',
-      'st_stephens':       '1tUb4cLAFp9TsdXLqwTZSMJLbiO7vDo4j',
-      'whetley':           '1MIiipSh9qCLXqgCGAcNlXUFZQSZSaClT'
+      'barkerend': '1xgNXHfb5XCOP4sOfUVvpZePCpZDp-EMZ',
+      'beckfoot_allerton': '1ht04I1kUcJrTUFHgTtF8ULWR6yMRarcY',
+      'beckfoot_heaton': '1jFnWfR3EsZ8kC6uPlLrGx1YzdqAphZ60',
+      'brackenhill': '11n6HlaWfZxtMHK9AQkw16Ywp-shErwmY',
+      'dixons': '1205EotzZ5SiGQ5ojjsSh8JpN_DtVoYpN',
+      'home_farm': '1yEWxBptU_K_xHMrEwTx6FiX3QgnY64rj',
+      'st_barnabas': '12tFrwg-07kcUhg7qPiPvWlIa-2u3AaGG',
+      'st_johns': '1e8v4bXfcdiKBAdNcQL6L7QyeAFoT31Cl',
+      'st_stephens': '1UXl-1d3oTCRBhykLZmsGcFcKZ_2WUk89',
+      'whetley': '1N1-_s1dePbYkZuElBvE6p1e3gz2nmddD'
     };
     indexFile = await get_data(indexFiles[school], 'index');
 
@@ -151,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     noLocationDataText = document.getElementById('no-location-data-text');
     dataAggregationText = document.getElementById('data-aggregation-text');
 
-    binSizes = ['5', '10', '50'];
+    binSizes = ['10', '50', '100'];
 
   };
   await init();
@@ -214,6 +230,12 @@ document.addEventListener('DOMContentLoaded', async function() {
       };
     };
 
+    const scatter_colors = [
+      '#08bdba', '#009794', '#007d79', '#005d5d', '#004144', '#022b30',
+      '#be95ff', '#a870ff', '#8a3ffc', '#6929c4', '#6929c4', '#31135e',
+      '#78a9ff', '#4589ff', '#0f62fe', '#0043ce', '#002d9c', '#001d6c'
+    ];
+    const scatter_colors_len = scatter_colors.length;
     const initialData = [];
     for (let i = 0; i < timeSeriesData.length; i++) {
       const dates = [];
@@ -225,7 +247,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         mode: 'lines',
         name: 'Atmotube ' + atmotubeNumbers[i],
         x: dates,
-        y: timeSeriesData[i]['values'][featureDropDown.value]
+        y: timeSeriesData[i]['values'][featureDropDown.value],
+        marker: {
+          color: scatter_colors[i % scatter_colors_len]
+        }
       });
     };
     const initialLayout = JSON.parse(JSON.stringify(layout[featureDropDown.value]));
@@ -292,7 +317,16 @@ document.addEventListener('DOMContentLoaded', async function() {
   };
 
   function initHeatMap() {
-    map = L.map('mapid', { attributionControl: false, zoomControl: false }).setView([53.77875400063466, -1.7551848715634326], 12);
+    map = L.map('mapid', {
+      attributionControl: false,
+      zoomControl: false,
+      /* define bounds: */
+      maxBounds: [
+        [53.7, -1.9],
+        [53.9, -1.6]
+      ],
+      maxBoundsViscosity: 1.0,
+    }).setView([53.77875400063466, -1.7551848715634326], 12);
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
       maxZoom: 20,
       minZoom: 12,
@@ -394,32 +428,32 @@ document.addEventListener('DOMContentLoaded', async function() {
       if (period.split(',')[0] != 'daily' || atmotube == 'all') {
         const zoomLevel = map.getZoom();
         if (periodDropDown.value == 'alltime') {
-          if (zoomLevel >= 18) {
+          if (zoomLevel >= 17) {
             if (currentBinSize !== '10') {
               resetHeatMap();
               setBinSize('10');
             };
           } else {
-            if (currentBinSize !== '50') {
+            if (currentBinSize !== '100') {
               resetHeatMap();
-              setBinSize('50');
+              setBinSize('100');
             };
           };
         } else {
           if (zoomLevel >= 18) {
-            if (currentBinSize !== '5') {
-              resetHeatMap();
-              setBinSize('5');
-            };
-          } else if (zoomLevel < 14) {
-            if (currentBinSize !== '50') {
-              resetHeatMap();
-              setBinSize('50');
-            };
-          } else {
             if (currentBinSize !== '10') {
               resetHeatMap();
               setBinSize('10');
+            };
+          } else if (zoomLevel < 14) {
+            if (currentBinSize !== '100') {
+              resetHeatMap();
+              setBinSize('100');
+            };
+          } else {
+            if (currentBinSize !== '50') {
+              resetHeatMap();
+              setBinSize('50');
             };
           };
         };
@@ -576,7 +610,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 ' ppm<br>Number of observations: ' + heatMapData[binSize]['observations'][i] +
                 '<br>First observation: ' + new Date(heatMapData[binSize]['start'][i]).toUTCString() +
                 '<br>Last observation: ' + new Date(heatMapData[binSize]['end'][i]).toUTCString();
-              if (heatMapData[binSize]['atmotubes'][i]) {
+              if (heatMapData[binSize]['atmotubes'] != undefined &&
+                  heatMapData[binSize]['atmotubes'][i]) {
                 tooltip += '<br>Number of Atmotubes: ' + heatMapData[binSize]['atmotubes'][i];
               };
               layers[binSize][feature].addLayer(L.rectangle(rectangle, {
@@ -600,11 +635,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         };
       };
 
-      if (heatMapData[5] && heatMapData[10] && heatMapData[50]) {
+      if (heatMapData[10] && heatMapData[50] && heatMapData[100]) {
         if (period == 'alltime') {
-          setBinSize('50');
+          setBinSize('100');
         } else {
-          setBinSize('10');
+          setBinSize('50');
         };
         checkZoomLevel();
       };
