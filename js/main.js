@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     get_data = async function(data_url, type) {
       let data = null;
-      let url_prefix = 'https://www.googleapis.com/drive/v2/files/';
-      let url_suffix = '?alt=media&key=AIzaSyA6LgT8w7V7syKB6Deq0nxjpxX1HIalo6k';
+      let url_prefix = 'https://dl.dropboxusercontent.com/s/';
+      let url_suffix = '?dl=1';
       let full_url = url_prefix + data_url + url_suffix;
       /* get the encrypted data: */
       if (data_url == 'null') {
@@ -87,16 +87,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     };
 
     const indexFiles = {
-      'barkerend': '1xgNXHfb5XCOP4sOfUVvpZePCpZDp-EMZ',
-      'beckfoot_allerton': '1ht04I1kUcJrTUFHgTtF8ULWR6yMRarcY',
-      'beckfoot_heaton': '1jFnWfR3EsZ8kC6uPlLrGx1YzdqAphZ60',
-      'brackenhill': '11n6HlaWfZxtMHK9AQkw16Ywp-shErwmY',
-      'dixons': '1205EotzZ5SiGQ5ojjsSh8JpN_DtVoYpN',
-      'home_farm': '1yEWxBptU_K_xHMrEwTx6FiX3QgnY64rj',
-      'st_barnabas': '12tFrwg-07kcUhg7qPiPvWlIa-2u3AaGG',
-      'st_johns': '1e8v4bXfcdiKBAdNcQL6L7QyeAFoT31Cl',
-      'st_stephens': '1UXl-1d3oTCRBhykLZmsGcFcKZ_2WUk89',
-      'whetley': '1N1-_s1dePbYkZuElBvE6p1e3gz2nmddD'
+      'barkerend': 'xyb8ufjggrzhufk/barkerend_index.json',
+      'beckfoot_allerton': 'drx57hxog2bf4ra/beckfoot_allerton_index.json',
+      'beckfoot_heaton': 'qo2gg6xh07gubmm/beckfoot_heaton_index.json',
+      'brackenhill': 'fa2v6j7ehrhrn3h/brackenhill_index.json',
+      'dixons': '01fch3afp8u3ap8/dixons_index.json',
+      'home_farm': '996uzau7f2m7cpq/home_farm_index.json',
+      'st_barnabas': 'te20asodefz9a37/st_barnabas_index.json',
+      'st_johns': 'yqxwkam8prewl7e/st_johns_index.json',
+      'st_stephens': 'kd2d21417fke9mn/st_stephens_index.json',
+      'whetley': '9a3dcldstnl597q/whetley_index.json',
     };
     indexFile = await get_data(indexFiles[school], 'index');
 
